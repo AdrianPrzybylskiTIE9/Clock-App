@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Picker, StatusBar } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
-function newTimeZone() {
+function newTimeZone(props) {
   return (
-    <View style={styles.elementContainer}>
+    <Pressable style={styles.elementContainer} onPress={() => {props.navigation.navigate("Add New Time Zone");}}>
       <AntDesign name="plus" style={styles.addIcon}/>
       <Text style={styles.addText}>Add new timezone</Text>
-    </View>
+    </Pressable>
   );
 }
 export default newTimeZone;

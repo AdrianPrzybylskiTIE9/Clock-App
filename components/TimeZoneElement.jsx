@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Picker, StatusBar } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import Clock from "./Clock";
+import CountryList from "./CountryList";
 
 function TimeZoneElement(props) {
   return (
     <View style={styles.elementContainer}>
-      <Text style={styles.elementEmoji}>{props.emoji}</Text>
       <Text style={styles.elementText}>{props.name}</Text>
+      <View style={styles.clock}>
+        <Clock country={CountryList[props.name]} fontSize={18} />
+      </View>
     </View>
   );
 }
@@ -33,18 +37,14 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   elementText: {
-    fontSize: 22,
-    fontWeight: "bold",
-  },
-  elementEmoji: {
+    width: "40%",
     margin: 15,
     padding: 3,
 
-    fontSize: 42,
-    borderRadius: 5,
-
-    color: "black",
-    backgroundColor: "lightgray",
-    opacity: 0.8,
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  clock: {
+    width: '60%'
   },
 });
