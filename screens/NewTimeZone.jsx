@@ -9,72 +9,49 @@ import {
 } from "react-native";
 import CountryList from "../components/CountryList";
 
-export default function NewTimeZone(props) {
-  const [text, setText] = useState("");
+export default function NewTimeZone({route, navigation}) {
+  const {countries, setCountries} = route.params
+  const [selectedCountry, setSelectedCountry] = useState(null)
 
-  const filterCountries = (newText) => {
-    if (newText.trim() != "") {
-      return Object.keys(CountryList).filter((country) =>
-        country.toLowerCase().includes(newText.toLowerCase())
-      );
-    }
-  };
-
-  const [filteredCountries, setFilteredCountries] = useState(
-    filterCountries("")
-  );
-
-  const handleChangeText = (newText) => {
-    setText(newText);
-    setFilteredCountries(filterCountries(text));
-    console.log(`New text: ${newText}`);
-  };
-
-  const setInput = (item) => {
-    setText(item);
-    setFilteredCountries("");
-  };
+  const data = Object.entries(CountryList);
 
   const renderCountry = ({ item }) => (
     <Pressable
-      style={styles.flatListButton}
-      onPress={() => {
-        setInput(item);
-      }}
+      style={[
+        styles.flatListButton,
+        selectedCountry === item[0] && { borderColor: "#1468be" }
+      ]}
+      onPress={() => setSelectedCountry(item[0])}
     >
-      <Text style={{ color: "black" }}>{`${item} (${CountryList[item]})`}</Text>
+      <Text style={styles.flatListButtonText}>{`${item[0]} (${item[1]})`}</Text>
     </Pressable>
   );
 
   const addNewCountry = () => {
-    if (text in CountryList) {
-      props.setCountries([...props.countries, text]);
-    } else {
-      console.log("not exists");
+    if (selectedCountry && !countries.includes(selectedCountry)) {
+      setCountries(prev => [...prev, selectedCountry]);
     }
+    navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
         <Text style={styles.title}>New Time Zone</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={handleChangeText}
-          value={text}
-        ></TextInput>
 
-        <FlatList
-          data={filteredCountries}
-          renderItem={renderCountry}
-          keyExtractor={(item) => item}
-          style={styles.flatList}
-        />
+        <View style={styles.flatList}>
+          <FlatList
+            data={data}
+            renderItem={renderCountry}
+            keyExtractor={(item) => item[0]}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
       </View>
 
       <View style={styles.buttonContainer}>
         <Pressable style={styles.button} onPress={addNewCountry}>
-          <Text style={styles.buttonText}>Add Tme Zone</Text>
+          <Text style={styles.buttonText}>Add Time Zone</Text>
         </Pressable>
       </View>
     </View>
@@ -108,21 +85,27 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   flatList: {
-    height: "10%",
-    maxHeight: "30%",
+    height: "95%",
+    marginTop: 10,
     padding: 10,
     borderRadius: 5,
 
-    backgroundColor: "white",
+    // backgroundColor: "white",
   },
   flatListButton: {
-    width: "100%",
-    paddingVertical: 5,
-    paddingHorizontal: 5,
+    alignItems: "center",
 
-    // borderWidth: 1,
-    // borderColor: "#ccc",
+    width: "100%",
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    marginVertical: 5,
+
     borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#878e95",
+  },
+  flatListButtonText: {
+    color: "#878e95",
   },
   buttonContainer: {
     justifyContent: "flex-end",

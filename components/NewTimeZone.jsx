@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
-function newTimeZone(props) {
+export default function newTimeZone(props) {
   return (
-    <Pressable style={styles.elementContainer} onPress={() => {props.navigation.navigate("Add New Time Zone");}}>
+    <Pressable style={styles.elementContainer} onPress={() => {props.navigation.navigate("Add New Time Zone", {
+      setCountries: props.setCountries,
+      countries: props.countries,
+    });}}>
       <AntDesign name="plus" style={styles.addIcon}/>
       <Text style={styles.addText}>Add new timezone</Text>
     </Pressable>
   );
 }
-export default newTimeZone;
 
 const styles = StyleSheet.create({
   elementContainer: {

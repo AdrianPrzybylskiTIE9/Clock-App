@@ -1,26 +1,65 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Picker, StatusBar } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Picker,
+  StatusBar,
+  Button,
+  FlatList
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Clock from "../components/Clock";
 import NewTimeZone from "../components/NewTimeZone";
 import TimeZoneElement from "../components/TimeZoneElement";
 import CountryList from "../components/CountryList";
+import { SwipeListView } from "react-native-swipe-list-view";
 
-export default function MainScreen({navigation}) {
-  const [country, setCountry] = useState("Poland");
-  const [countries, setCountries] = useState(['Poland'])
+export default function MainScreen({ navigation }) {
+  const [country, setCountry] = useState("Polish");
+  const [countries, setCountries] = useState(["Polish"]);
 
-  console.log(countries);
+  console.log(country);
+
+  useEffect(() => {
+    AsyncStorage.getItem("countries")
+      .then((value) => {
+        if (value !== null) {
+          setCountries(JSON.parse(value));
+        }
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  useEffect(() => {
+    // Save the count to AsyncStorage on every change
+    AsyncStorage.setItem("countries", JSON.stringify(countries)).catch(
+      (error) => console.log(error)
+    );
+  }, [countries]);
+
+
 
   return (
     <View style={styles.container}>
       <View style={styles.clockContainer}>
-        <Clock country={`${CountryList[country]}`} fontSize={42} />
+        <Clock country={country} fontSize={42} />
       </View>
       <Text style={styles.timeZoneText}>Time Zones</Text>
-      <TimeZoneElement name={country} />
-      <TimeZoneElement name={"United States of America"} />
+      <FlatList
+        data={countries}
+        renderItem={({ item }) => (
+          <TimeZoneElement name={item} setCountry={setCountry} />
+        )}
+        showsVerticalScrollIndicator={false}
+        style={styles.timeZonesFlatList}
+      />
 
-      <NewTimeZone navigation={navigation} setCountries={setCountries} countries={countries}/>
+      <NewTimeZone
+        navigation={navigation}
+        setCountries={setCountries}
+        countries={countries}
+      />
     </View>
   );
 }
@@ -51,6 +90,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
+  },
+  timeZonesFlatList: {
+    width: "100%",
+    height: "70%",
   },
   timeZoneText: {
     alignSelf: "flex-start",
