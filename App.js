@@ -13,7 +13,7 @@ export default function App() {
 
   return (
     <>
-      <StatusBar style="auto" />
+      <StatusBar style="auto" backgroundColor={'white'} barStyle={"dark-content"}/>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen

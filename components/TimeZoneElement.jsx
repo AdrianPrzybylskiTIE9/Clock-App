@@ -1,18 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
 import Clock from "./Clock";
-import CountryList from "./CountryList";
+import TimeZonesList from "./TimeZonesList";
 
 export default function TimeZoneElement(props) {
+  console.log('-----------|');
+  console.log(props.timeZone);
+
   return (
     <Pressable
-      style={styles.elementContainer}
-      onPress={() => props.setCountry(props.name)}
+      style={[
+        styles.elementContainer,
+        props.timeZone === props.currTimeZone && { borderColor: "#1468be" },
+      ]}
+      onPress={() => props.setTimeZone(props.timeZone)}
     >
-      <Text style={styles.elementText}>{props.name}</Text>
+      <Text
+        style={[
+          styles.elementText,
+          props.timeZone === props.currTimeZone && { color: "#1468be" },
+        ]}
+      >
+        {TimeZonesList[props.timeZone]}
+      </Text>
       <View style={styles.clock}>
-        <Clock country={props.name} fontSize={18} />
+        <Clock timeZone={props.timeZone} fontSize={18} />
       </View>
     </Pressable>
   );
@@ -27,6 +39,8 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 5,
     borderRadius: 15,
+    borderWidth: 1,
+    borderColor: 'white',
 
     backgroundColor: "white",
 

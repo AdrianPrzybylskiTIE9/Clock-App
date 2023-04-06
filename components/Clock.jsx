@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import CountryList from "../components/CountryList";
 
 export default function Clock(props) {
-  const [time, setTime] = useState(
-    new Date().toLocaleTimeString(CountryList[props.country])
-  );
-
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setTime(new Date().toLocaleTimeString(CountryList[props.country]));
+      setCurrentTime(new Date());
     }, 1000);
     return () => clearInterval(intervalId);
-  }, [props.country]);
+  }, []);
+
+  const options = {
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+    timeZone: props.timeZone,
+  };
 
   return (
     <View style={styles.clockContainer}>
       <Text style={[styles.timeText, { fontSize: props.fontSize }]}>
-        {time}
+        {currentTime.toLocaleTimeString("PL-pl", { timeZone: props.timeZone })}
+      </Text>
+      <Text style={[styles.dateText, { fontSize: (props.fontSize/1.5) }]}>
+        {currentTime.toLocaleDateString("PL-pl", options)}
       </Text>
     </View>
   );
@@ -28,6 +34,7 @@ const styles = StyleSheet.create({
   clockContainer: {
     justifyContent: "center",
     alignItems: "center",
+    flexDirection: "column",
   },
 
   timeText: {
@@ -35,5 +42,10 @@ const styles = StyleSheet.create({
 
     fontWeight: "bold",
     color: "black",
+  },
+  dateText: {
+    // fontWeight: "bold",
+    color: "black",
+    fontSize: 1,
   },
 });

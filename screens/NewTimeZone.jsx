@@ -4,32 +4,33 @@ import {
   Text,
   View,
   Pressable,
-  TextInput,
   FlatList,
 } from "react-native";
-import CountryList from "../components/CountryList";
+import TimeZonesList from "../components/TimeZonesList";
 
 export default function NewTimeZone({route, navigation}) {
-  const {countries, setCountries} = route.params
-  const [selectedCountry, setSelectedCountry] = useState(null)
+  const { timeZones, setTimeZones } = route.params;
+  const [selectedTimeZone, setSelectedTimeZone] = useState(null);
 
-  const data = Object.entries(CountryList);
+  const data = Object.entries(TimeZonesList);
 
   const renderCountry = ({ item }) => (
     <Pressable
       style={[
         styles.flatListButton,
-        selectedCountry === item[0] && { borderColor: "#1468be" }
+        selectedTimeZone === item[0] && { borderColor: "#1468be" },
       ]}
-      onPress={() => setSelectedCountry(item[0])}
+      onPress={() => setSelectedTimeZone(item[0])}
     >
       <Text style={styles.flatListButtonText}>{`${item[0]} (${item[1]})`}</Text>
     </Pressable>
   );
 
   const addNewCountry = () => {
-    if (selectedCountry && !countries.includes(selectedCountry)) {
-      setCountries(prev => [...prev, selectedCountry]);
+    console.log(timeZones);
+    console.log(selectedTimeZone);
+    if (selectedTimeZone && !(timeZones.includes(selectedTimeZone))) {
+      setTimeZones((prev) => [...prev, selectedTimeZone]);
     }
     navigation.goBack();
   };
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "column",
     width: "100%",
-    height: "80%",
+    height: "85%",
     marginBottom: 20,
   },
   title: {
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   flatList: {
-    height: "95%",
+    height: "100%",
     marginTop: 10,
     padding: 10,
     borderRadius: 5,
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     marginVertical: 5,
 
-    borderRadius: 5,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: "#878e95",
   },
@@ -108,7 +109,8 @@ const styles = StyleSheet.create({
     color: "#878e95",
   },
   buttonContainer: {
-    justifyContent: "flex-end",
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
     width: "100%",
     height: "10%",
   },
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingVertical: 15,
     paddingHorizontal: 30,
-    borderRadius: 5,
+    borderRadius: 10,
 
     backgroundColor: "#1468be",
   },

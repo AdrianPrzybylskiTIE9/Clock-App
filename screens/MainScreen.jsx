@@ -3,53 +3,50 @@ import {
   StyleSheet,
   Text,
   View,
-  Picker,
   StatusBar,
-  Button,
   FlatList
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Clock from "../components/Clock";
-import NewTimeZone from "../components/NewTimeZone";
+import NewTimeZone from "../components/NewTimeZoneButton";
 import TimeZoneElement from "../components/TimeZoneElement";
-import CountryList from "../components/CountryList";
-import { SwipeListView } from "react-native-swipe-list-view";
 
 export default function MainScreen({ navigation }) {
-  const [country, setCountry] = useState("Polish");
-  const [countries, setCountries] = useState(["Polish"]);
-
-  console.log(country);
+  const [timeZone, setTimeZone] = useState("Europe/Paris");
+  const [timeZones, setTimeZones] = useState([]);
 
   useEffect(() => {
-    AsyncStorage.getItem("countries")
+    AsyncStorage.getItem("timeZones")
       .then((value) => {
         if (value !== null) {
-          setCountries(JSON.parse(value));
+          setTimeZones(JSON.parse(value));
         }
       })
       .catch((error) => console.log(error));
   }, []);
 
   useEffect(() => {
-    // Save the count to AsyncStorage on every change
-    AsyncStorage.setItem("countries", JSON.stringify(countries)).catch(
-      (error) => console.log(error)
+    AsyncStorage.setItem("timeZones", JSON.stringify(timeZones)).catch((error) =>
+      console.log(error)
     );
-  }, [countries]);
+  }, [timeZones]);
 
 
 
   return (
     <View style={styles.container}>
       <View style={styles.clockContainer}>
-        <Clock country={country} fontSize={42} />
+        <Clock timeZone={timeZone} fontSize={42} />
       </View>
       <Text style={styles.timeZoneText}>Time Zones</Text>
       <FlatList
-        data={countries}
+        data={timeZones}
         renderItem={({ item }) => (
-          <TimeZoneElement name={item} setCountry={setCountry} />
+          <TimeZoneElement
+            timeZone={item}
+            currTimeZone={timeZone}
+            setTimeZone={setTimeZone}
+          />
         )}
         showsVerticalScrollIndicator={false}
         style={styles.timeZonesFlatList}
@@ -57,8 +54,8 @@ export default function MainScreen({ navigation }) {
 
       <NewTimeZone
         navigation={navigation}
-        setCountries={setCountries}
-        countries={countries}
+        setTimeZones={setTimeZones}
+        timeZones={timeZones}
       />
     </View>
   );
@@ -66,18 +63,19 @@ export default function MainScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: StatusBar.currentHeight + 20,
+    paddingTop: StatusBar.currentHeight,
     flex: 1,
     alignItems: "center",
     paddingHorizontal: 20,
+    backgroundColor: 'white',
   },
   clockContainer: {
     justifyContent: "center",
     alignItems: "center",
 
     width: "100%",
-    height: "15%",
-    margin: 20,
+    height: "20%",
+    marginBottom: 20,
     borderRadius: 15,
 
     backgroundColor: "white",

@@ -5,8 +5,8 @@ import { AntDesign } from "@expo/vector-icons";
 export default function newTimeZone(props) {
   return (
     <Pressable style={styles.elementContainer} onPress={() => {props.navigation.navigate("Add New Time Zone", {
-      setCountries: props.setCountries,
-      countries: props.countries,
+      setTimeZones: props.setTimeZones,
+      timeZones: props.timeZones,
     });}}>
       <AntDesign name="plus" style={styles.addIcon}/>
       <Text style={styles.addText}>Add new timezone</Text>
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     borderRadius: 15,
 
-    backgroundColor: "white",
+    backgroundColor: "#1468be",
 
     shadowColor: "#000",
     shadowOffset: {
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
   addText: {
     fontSize: 22,
     fontWeight: "bold",
+    color: "white",
   },
   addIcon: {
     margin: 15,
@@ -45,8 +46,7 @@ const styles = StyleSheet.create({
     fontSize: 42,
     borderRadius: 5,
 
-    color: "black",
-    backgroundColor: "lightgray",
-    opacity: 0.8,
+    color: "white",
+    opacity: .8,
   },
 });
